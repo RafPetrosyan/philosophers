@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   source.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/31 16:24:22 by rafpetro          #+#    #+#             */
+/*   Updated: 2024/07/31 16:25:21 by rafpetro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philos.h"
 
 void	validacia(int argc, char **argv)
@@ -13,4 +25,27 @@ void	validacia(int argc, char **argv)
 			exit(write(2, "Invalid Argument !\n", 19));
 		++i;
 	}
+}
+
+int	ft_atoi(const char *nptr)
+{
+	int	i;
+	int	sign;
+	int	numb;
+
+	i = 0;
+	sign = 1;
+	numb = 0;
+	if (!(nptr[i] >= '0' && nptr[i] <= '9'))
+		return (-1);
+	if (nptr[i] == '0' && nptr[i + 1] != '\0')
+		return (-1);
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		numb = numb * 10 + nptr[i] - '0';
+		++i;
+	}
+	if (nptr[i] != '\0')
+		return (-1);
+	return (sign * numb);
 }
