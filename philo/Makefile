@@ -1,17 +1,17 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -I ./ #-g -pthread -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -I ./
 
 NAME = philo
 
-SRCS = philos.c #utils.c init.c routine.c
+SRCS = philos.c
 
 OBJS = $(SRCS:.c=.o)
 
 
 all: $(NAME)
 
-$(NAME): $(OBJS) Makefile philosophers.h
+$(NAME): $(OBJS) Makefile philos.h
 	$(CC) $(CFLAGS) $(OBJS) -o $@
 
 %.o: %.c
