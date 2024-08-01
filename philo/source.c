@@ -6,11 +6,12 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:22 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/07/31 16:25:21 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:28:21 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
+
 
 void	validacia(int argc, char **argv)
 {
@@ -29,12 +30,10 @@ void	validacia(int argc, char **argv)
 
 int	ft_atoi(const char *nptr)
 {
-	int	i;
-	int	sign;
-	int	numb;
+	int		i;
+	size_t	numb;
 
 	i = 0;
-	sign = 1;
 	numb = 0;
 	if (!(nptr[i] >= '0' && nptr[i] <= '9'))
 		return (-1);
@@ -47,5 +46,7 @@ int	ft_atoi(const char *nptr)
 	}
 	if (nptr[i] != '\0')
 		return (-1);
-	return (sign * numb);
+	if (i >= 11 || numb > 2147483647)
+		return -1;
+	return (numb);
 }
