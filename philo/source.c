@@ -6,14 +6,14 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:22 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/08/01 17:28:21 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:20:19 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
 
 
-void	validacia(int argc, char **argv)
+int	validacia(int argc, char **argv)
 {
 	int	i;
 
@@ -21,11 +21,18 @@ void	validacia(int argc, char **argv)
 	while (i < argc)
 	{
 		if (ft_atoi(argv[i]) == -1)
-			exit(write(2, "Invalid Argument !\n", 19));
+		{
+			printf("Invalid Argument !\n");
+			return (1);
+		}
 		if (i != argc - 1 && ft_atoi(argv[i]) == 0)
-			exit(write(2, "Invalid Argument !\n", 19));
+		{
+			printf("Invalid Argument !\n");
+			return (1);
+		}
 		++i;
 	}
+	return (0);
 }
 
 int	ft_atoi(const char *nptr)
