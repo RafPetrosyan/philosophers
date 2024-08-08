@@ -6,7 +6,7 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:23:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/08/06 16:42:07 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:56:33 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ typedef struct s_philo
 	pthread_t 			thread_id;
 	int					number_of_times_he_ate;
 	size_t				after_last_meal;
+	pthread_mutex_t		after_last_meal_mutex;
+	pthread_mutex_t		number_of_times_he_ate_mutex;
 	struct s_philo_info	*data;
 	
 } t_philo;
