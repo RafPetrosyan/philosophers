@@ -6,7 +6,7 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:23:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/08/08 10:56:33 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/08/09 10:29:57 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ typedef struct s_philo_info
 
 int		ft_atoi(const char *nptr);
 int		validacia(int argc, char **argv);
-void	init_philos(t_philo_info **philo_info, int argc, char **argv);
+void	init_philo_info(t_philo_info **philo_info, int argc, char **argv);
 void	init_mutex(t_philo_info *philos);
+long long	get_time(void);
+void	*routine(void *philo_void);
+void	init_mutex(t_philo_info *philo_info);
 
 #endif
