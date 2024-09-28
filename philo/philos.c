@@ -6,7 +6,7 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:17 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/08/09 11:28:21 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/09/28 14:17:01 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	error_handler(int i, t_philo_info *philo_info)
 		free(philo_info);
 		return (1);	
 	}
+	return (0);	
 }
 
 void	init_philo_info(t_philo_info **philo_info, int argc, char **argv)
@@ -71,8 +72,8 @@ void	init_philo_info(t_philo_info **philo_info, int argc, char **argv)
 	else
 		(*philo_info)->count_eat = -1;
 	(*philo_info)->finish_time = 0;
-	if ((*philo_info)->count_eat == 0)
-		return 0;
+	// if ((*philo_info)->count_eat == 0)
+	// 	return 0;
 }
 void	create_threads(t_philo_info *pinfo)
 {
@@ -116,7 +117,7 @@ void	*routine(void *philo_void)
 	right_fork = &(philo->data->forks_arr[philo->index]);
 	if ((philo->index) % 2 == 0)
 		usleep(500);
-	while (!finished(philo->data))
+	while (!get_finish_time(philo->data))
 	{
 		if (!eating(philo, left_fork, right_fork))
 			return (0);
@@ -209,4 +210,106 @@ int	close_destroy(t_philo_info *philos_info)
 	free(philos_info->forks_arr);
 	free(philos_info);
 	return (0);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+int	print(t_philo_info *philo_info, int index, char *message)
+{
+	if (get_finish_time(philo_info))
+		return (0);
+	pthread_mutex_lock(&(philo_info->print_mutex));
+	printf("%llu %d %s\n", get_time() - philo_info->start_time,
+		index + 1, message);
+	pthread_mutex_unlock(&(philo_info->print_mutex));
+	return (1);
+}
+
+int	taking_forks(t_philo *philo,
+	pthread_mutex_t **l_fork, pthread_mutex_t **r_fork)
+{
+	if (!print(philo->data, philo->index, "has taken a fork")
+		|| philo->data->philos_count == 1)
+	{
+		pthread_mutex_unlock(*r_fork);
+		return (0);
+	}
+	pthread_mutex_lock(*l_fork);
+	if (!print(philo->data, philo->index, "has taken a fork")
+		|| philo->data->philos_count == 1)
+	{
+		pthread_mutex_unlock(*r_fork);
+		pthread_mutex_unlock(*l_fork);
+		return (0);
+	}
+	return (1);
+}
+
+int	check_dead(t_philo_info *philos)
+{
+	int	i;
+
+	i = 0;
+	while (i < philos->philos_count)
+	{
+		pthread_mutex_lock(&(philos->philos_arr[i].after_last_meal_mutex));
+		if ((get_time() - philos->philos_arr[i].after_last_meal)
+			>= (size_t) philos->time_to_die)
+		{
+			pthread_mutex_lock(&(philos->finish_mutex));
+			philos->finish_time = 1;
+			pthread_mutex_unlock(&(philos->finish_mutex));
+			pthread_mutex_lock(&(philos->print_mutex));
+			printf("%llu %d %s\n", get_time() - philos->start_time, i + 1, "died");
+			pthread_mutex_unlock(&(philos->print_mutex));
+			pthread_mutex_unlock(&(philos->philos_arr[i].after_last_meal_mutex));
+			return (1);
+		}
+		pthread_mutex_unlock(&(philos->philos_arr[i].after_last_meal_mutex));
+		i++;
+	}
+	return (0);
+}
+
+int	check_eaten(t_philo_info *philos)
+{
+	int	i;
+	int	all_philos_get_finish_time;
+
+	if (philos->count_eat < 0)
+		return (0);
+	i = 0;
+	all_philos_get_finish_time = 0;
+	while (i < philos->philos_count)
+	{
+		pthread_mutex_lock(&(philos->philos_arr[i].number_of_times_he_ate_mutex));
+		if (philos->philos_arr[i].number_of_times_he_ate
+			>= philos->count_eat)
+			all_philos_get_finish_time++;
+		pthread_mutex_unlock(&(philos->philos_arr[i].number_of_times_he_ate_mutex));
+		i++;
+	}
+	if (all_philos_get_finish_time == philos->philos_count)
+	{
+		pthread_mutex_lock(&(philos->finish_mutex));
+		philos->finish_time = 1;
+		pthread_mutex_unlock(&(philos->finish_mutex));
+		return (1);
+	}
+	return (0);
+}
+
+
+void	ft_usleep(long long mls, t_philo_info *info)
+{
+	long long	t;
+
+	t = get_time();
+	while (get_time() - t <= mls)
+	{
+		if (get_finish_time(info))
+			return ;
+		usleep(500);
+	}
 }
