@@ -6,7 +6,7 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:23:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/09/28 13:54:59 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/09/28 14:21:42 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int		validacia(int argc, char **argv);
 
 
 int	error_handler(int i, t_philo_info *philo_info);
-void	init_philo_info(t_philo_info **philo_info, int argc, char **argv);
+void	init_philo_info(t_philo_info *philo_info, int argc, char **argv);
 void	create_threads(t_philo_info *pinfo);
 void	*routine(void *philo_void);
 void	init_mutex(t_philo_info *philo_info);

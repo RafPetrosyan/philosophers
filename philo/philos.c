@@ -6,7 +6,7 @@
 /*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:17 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/09/28 14:17:01 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/09/28 15:44:01 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int	main(int argc, char **argv)
 		return (error_handler(2, philo_info));	
 	create_threads(philo_info);
 	while (1)
-	{
 		if (check_dead(philo_info) || check_eaten(philo_info))
 			break ;
-	}
+	if (philo_info->count_eat == 0)
+		return 0;
 	return (close_destroy(philo_info));
 }
 
@@ -58,22 +58,18 @@ int	error_handler(int i, t_philo_info *philo_info)
 	return (0);	
 }
 
-void	init_philo_info(t_philo_info **philo_info, int argc, char **argv)
+void	init_philo_info(t_philo_info *philo_info, int argc, char **argv)
 {
-	int	i;
-	
-	(*philo_info)->start_time = get_time();
-	(*philo_info)->philos_count = ft_atoi(argv[1]);
-	(*philo_info)->time_to_die = ft_atoi(argv[2]);
-	(*philo_info)->time_to_eat = ft_atoi(argv[3]);
-	(*philo_info)->time_to_sleep = ft_atoi(argv[4]);
+	philo_info->start_time = get_time();
+	philo_info->philos_count = ft_atoi(argv[1]);
+	philo_info->time_to_die = ft_atoi(argv[2]);
+	philo_info->time_to_eat = ft_atoi(argv[3]);
+	philo_info->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		(*philo_info)->count_eat = ft_atoi(argv[1]);
+		philo_info->count_eat = ft_atoi(argv[1]);
 	else
-		(*philo_info)->count_eat = -1;
-	(*philo_info)->finish_time = 0;
-	// if ((*philo_info)->count_eat == 0)
-	// 	return 0;
+		philo_info->count_eat = -1;
+	philo_info->finish_time = 0;
 }
 void	create_threads(t_philo_info *pinfo)
 {
@@ -86,7 +82,7 @@ void	create_threads(t_philo_info *pinfo)
 	while (i < pinfo->philos_count)
 	{
 		pinfo->philos_arr[i].data = pinfo;
-		pinfo->philos_arr[i].index = i + 1;
+		pinfo->philos_arr[i].index = i;
 		pinfo->philos_arr[i].after_last_meal = pinfo->start_time;
 		pinfo->philos_arr[i].number_of_times_he_ate = 0;
 		pthread_create(&(pinfo->philos_arr[i].thread_id), NULL,
@@ -115,7 +111,7 @@ void	*routine(void *philo_void)
 	else
 		left_fork = &(philo->data->forks_arr[philo->index - 1]);
 	right_fork = &(philo->data->forks_arr[philo->index]);
-	if ((philo->index) % 2 == 0)
+	if ((philo->index + 1) % 2 == 0)
 		usleep(500);
 	while (!get_finish_time(philo->data))
 	{
@@ -198,7 +194,7 @@ int	close_destroy(t_philo_info *philos_info)
 	while (i < philos_info->philos_count)
 	{
 		pthread_join(philos_info->philos_arr[i].thread_id, NULL);
-		pthread_mutex_destroy(&(philos_info->philos_arr[i]));
+		pthread_mutex_destroy(&(philos_info->forks_arr[i]));
 		pthread_mutex_destroy(&(philos_info->philos_arr[i].after_last_meal_mutex));
 		pthread_mutex_destroy(
 			&(philos_info->philos_arr[i].number_of_times_he_ate_mutex));
