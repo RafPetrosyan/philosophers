@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philos.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:17 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/09/28 15:44:01 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/09/30 01:27:03 by raf              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 		return (printf("Invalid number of arguments\n"));
 	if (validacia(argc, argv) == 1)
 		return (printf("invalid argument\n"));
-	philo_info = (t_philo_info *)malloc(sizeof(t_philo_info));
+	philo_info = malloc(sizeof(t_philo_info));
 	if (philo_info == 0)
 		return (printf("Memory allocation error!\n"));
 	init_philo_info(philo_info, argc, argv);
@@ -28,16 +28,16 @@ int	main(int argc, char **argv)
 	if (philo_info->forks_arr == 0)
 		return (error_handler(1, philo_info));
 	init_mutex(philo_info);
-	philo_info->philos_arr = (t_philo *)malloc((philo_info)->philos_count * sizeof(t_philo));
+	philo_info->philos_arr = malloc((philo_info)->philos_count * sizeof(t_philo));
 	if (philo_info->philos_arr == 0)
 		return (error_handler(2, philo_info));	
 	create_threads(philo_info);
 	while (1)
-		if (check_dead(philo_info) || check_eaten(philo_info))
+		if ((philo_info) || check_eaten(philo_info))
 			break ;
 	if (philo_info->count_eat == 0)
 		return 0;
-	return (close_destroy(philo_info));
+	return (!(philo_info->philos_arr == 0 || !close_destroy(philo_info)));
 }
 
 int	error_handler(int i, t_philo_info *philo_info)
@@ -106,7 +106,7 @@ void	*routine(void *philo_void)
 	pthread_mutex_t	*left_fork;
 
 	philo = philo_void;
-	if (philo->index == 1)
+	if (philo->index == 0)
 		left_fork = &(philo->data->forks_arr[philo->data->philos_count - 1]);
 	else
 		left_fork = &(philo->data->forks_arr[philo->index - 1]);
@@ -137,7 +137,7 @@ void	init_mutex(t_philo_info *philo_info)
 	while (i < (philo_info->philos_count))
 	{
 		pthread_mutex_init(&(philo_info->forks_arr[i]), NULL);
-		i++;
+		++i;
 	}
 }
 int	eating(t_philo *philo, pthread_mutex_t *left_fork, pthread_mutex_t *right_fork)
@@ -156,7 +156,7 @@ int	eating(t_philo *philo, pthread_mutex_t *left_fork, pthread_mutex_t *right_fo
 	pthread_mutex_unlock(right_fork);
 	pthread_mutex_unlock(left_fork);
 	pthread_mutex_lock(&(philo->number_of_times_he_ate_mutex));
-	philo->number_of_times_he_ate++;
+	++philo->number_of_times_he_ate;
 	pthread_mutex_unlock(&(philo->number_of_times_he_ate_mutex));
 	return (1);
 }
