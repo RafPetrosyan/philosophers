@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:49:46 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/09/30 16:00:03 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/10/03 00:47:59 by raf              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_philo_info(t_philo_info *philo_info, int argc, char **argv)
 	philo_info->time_to_eat = ft_atoi(argv[3]);
 	philo_info->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		philo_info->count_eat = ft_atoi(argv[1]);
+		philo_info->count_eat = ft_atoi(argv[5]);
 	else
 		philo_info->count_eat = -1;
 	philo_info->finish_time = 0;
@@ -63,7 +63,7 @@ void	create_threads(t_philo_info *pinfo)
 	{
 		pthread_mutex_init(&(pinfo->philos_arr[i].after_last_meal_mutex), NULL);
 		pthread_mutex_init(
-			&(pinfo->philos_arr[i].number_of_times_he_ate_mutex), NULL);
+			&(pinfo->philos_arr[i].count_he_ate_m), NULL);
 		i++;
 	}
 }

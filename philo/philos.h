@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philos.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:23:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/09/30 15:54:56 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/10/02 21:16:29 by raf              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_philo
 	int					number_of_times_he_ate;
 	size_t				after_last_meal;
 	pthread_mutex_t		after_last_meal_mutex;
-	pthread_mutex_t		number_of_times_he_ate_mutex;
+	pthread_mutex_t		count_he_ate_m;
 	struct s_philo_info	*data;
 }	t_philo;
 

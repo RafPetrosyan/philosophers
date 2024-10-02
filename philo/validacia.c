@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validacia.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:48:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/09/30 15:48:58 by rafpetro         ###   ########.fr       */
+/*   Updated: 2024/10/03 00:41:48 by raf              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,25 +34,76 @@ int	validacia(int argc, char **argv)
 	return (0);
 }
 
-int	ft_atoi(const char *nptr)
+int	error_handler(int i, t_philo_info *philo_info)
 {
-	int		i;
-	size_t	numb;
+	if (i == 1)
+	{
+		printf("Memory allocation error!\n");
+		free(philo_info);
+		return (1);
+	}
+	if (i == 2)
+	{
+		printf("Memory allocation error!\n");
+		free(philo_info->forks_arr);
+		free(philo_info);
+		return (1);
+	}
+	return (0);
+}
+
+int	check_dead(t_philo_info *philos)
+{
+	int	i;
 
 	i = 0;
-	numb = 0;
-	if (!(nptr[i] >= '0' && nptr[i] <= '9'))
-		return (-1);
-	if (nptr[i] == '0' && nptr[i + 1] != '\0')
-		return (-1);
-	while (nptr[i] >= '0' && nptr[i] <= '9')
+	while (i < philos->philos_count)
 	{
-		numb = numb * 10 + nptr[i] - '0';
+		pthread_mutex_lock(&(philos->philos_arr[i].after_last_meal_mutex));
+		if ((get_time() - philos->philos_arr[i].after_last_meal)
+			>= (size_t) philos->time_to_die)
+		{
+			pthread_mutex_lock(&(philos->finish_mutex));
+			philos->finish_time = 1;
+			pthread_mutex_unlock(&(philos->finish_mutex));
+			pthread_mutex_lock(&(philos->print_mutex));
+			printf("%llu %d %s\n", get_time() - philos->start_time,
+				i + 1, "died");
+			pthread_mutex_unlock(&(philos->print_mutex));
+			pthread_mutex_unlock(
+				&(philos->philos_arr[i].after_last_meal_mutex));
+			return (1);
+		}
+		pthread_mutex_unlock(&(philos->philos_arr[i].after_last_meal_mutex));
 		++i;
 	}
-	if (nptr[i] != '\0')
-		return (-1);
-	if (i >= 11 || numb > 2147483647)
-		return (-1);
-	return (numb);
+	return (0);
+}
+
+int	check_eaten(t_philo_info *pinfo)
+{
+	int	i;
+	int	all_philos_get_finish_time;
+
+	if (pinfo->count_eat == -1)
+		return (0);
+	i = 0;
+	all_philos_get_finish_time = 0;
+	while (i < pinfo->philos_count)
+	{
+		pthread_mutex_lock(&(pinfo->philos_arr[i].count_he_ate_m));
+		if (pinfo->philos_arr[i].number_of_times_he_ate
+			>= pinfo->count_eat)
+			++all_philos_get_finish_time;
+		pthread_mutex_unlock(&(pinfo->philos_arr[i].count_he_ate_m));
+		++i;
+	}
+	if (all_philos_get_finish_time == pinfo->philos_count)
+	{
+		pthread_mutex_lock(&(pinfo->finish_mutex));
+		pinfo->finish_time = 1;
+		pthread_mutex_unlock(&(pinfo->finish_mutex));
+		return (1);
+	}
+	return (0);
 }
