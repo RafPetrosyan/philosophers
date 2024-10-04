@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -I ./
 
 NAME = philo
 
-SRCS = philos.c source.c validacia.c inits.c
+SRCS = main.c source.c validacia.c inits.c
 
 OBJS = $(SRCS:.c=.o)
 
