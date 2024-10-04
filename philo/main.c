@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philos.c                                           :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:17 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/03 00:48:31 by raf              ###   ########.fr       */
+/*   Updated: 2024/10/04 23:07:24 by raf              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	close_destroy(t_philo_info *philos_info)
 			&(philos_info->philos_arr[i].after_last_meal_mutex));
 		pthread_mutex_destroy(
 			&(philos_info->philos_arr[i].count_he_ate_m));
-		i++;
+		++i;
 	}
 	pthread_mutex_destroy(&(philos_info->finish_mutex));
 	pthread_mutex_destroy(&(philos_info->print_mutex));

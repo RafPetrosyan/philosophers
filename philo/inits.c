@@ -6,7 +6,7 @@
 /*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:49:46 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/03 00:47:59 by raf              ###   ########.fr       */
+/*   Updated: 2024/10/04 23:07:03 by raf              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,6 @@ void	create_threads(t_philo_info *pinfo)
 		pthread_mutex_init(&(pinfo->philos_arr[i].after_last_meal_mutex), NULL);
 		pthread_mutex_init(
 			&(pinfo->philos_arr[i].count_he_ate_m), NULL);
-		i++;
+		++i;
 	}
 }
