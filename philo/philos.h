@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philos.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:23:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/03 21:09:06 by raf              ###   ########.fr       */
+/*   Updated: 2024/10/05 16:10:05 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ typedef struct s_philo_info
 int			ft_atoi(const char *nptr);
 int			validacia(int argc, char **argv);
 int			error_handler(int i, t_philo_info *philo_info);
+int			get_finish_time(t_philo_info *philos);
+int			close_destroy(t_philo_info *philos_info);
+int			check_dead(t_philo_info *philos);
+int			check_eaten(t_philo_info *philos);
+int			print(t_philo_info *philo_info, int index, char *message);
+int			eating(t_philo *philo, pthread_mutex_t *left_fork,
+				pthread_mutex_t *right_fork);
+int			taking_forks(t_philo *philo,
+				pthread_mutex_t **l_fork, pthread_mutex_t **r_fork);
 void		init_philo_info(t_philo_info *philo_info, int argc, char **argv);
 void		create_threads(t_philo_info *pinfo);
 void		*routine(void *philo_void);
 void		init_mutex(t_philo_info *philo_info);
-int			eating(t_philo *philo, pthread_mutex_t *left_fork,
-				pthread_mutex_t *right_fork);
-long long	get_time(void);
-int			get_finish_time(t_philo_info *philos);
-int			close_destroy(t_philo_info *philos_info);
-int			print(t_philo_info *philo_info, int index, char *message);
-int			taking_forks(t_philo *philo,
-				pthread_mutex_t **l_fork, pthread_mutex_t **r_fork);
-int			check_dead(t_philo_info *philos);
-int			check_eaten(t_philo_info *philos);
 void		ft_usleep(long long mls, t_philo_info *philosophers);
+long long	get_time(void);
 #endif

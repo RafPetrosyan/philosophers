@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 15:49:46 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/04 23:07:03 by raf              ###   ########.fr       */
+/*   Created: 2024/08/30 15:49:46 by rafpetro          #+#    #+#             */
+/*   Updated: 2024/10/05 16:07:50 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philos.h"
-
-void	init_mutex(t_philo_info *philo_info)
-{
-	int	i;
-
-	pthread_mutex_init(&(philo_info->print_mutex), NULL);
-	pthread_mutex_init(&(philo_info->finish_mutex), NULL);
-	i = 0;
-	while (i < (philo_info->philos_count))
-	{
-		pthread_mutex_init(&(philo_info->forks_arr[i]), NULL);
-		++i;
-	}
-}
 
 void	init_philo_info(t_philo_info *philo_info, int argc, char **argv)
 {
@@ -40,14 +26,25 @@ void	init_philo_info(t_philo_info *philo_info, int argc, char **argv)
 	philo_info->finish_time = 0;
 }
 
+void	init_mutex(t_philo_info *philo_info)
+{
+	int	i;
+
+	pthread_mutex_init(&(philo_info->print_mutex), NULL);
+	pthread_mutex_init(&(philo_info->finish_mutex), NULL);
+	i = 0;
+	while (i < (philo_info->philos_count))
+	{
+		pthread_mutex_init(&(philo_info->forks_arr[i]), NULL);
+		++i;
+	}
+}
+
 void	create_threads(t_philo_info *pinfo)
 {
 	int	i;
 
 	i = 0;
-	pinfo->philos_arr = malloc((pinfo)->philos_count * sizeof(t_philo));
-	if (pinfo->philos_arr == 0)
-		return ;
 	while (i < pinfo->philos_count)
 	{
 		pinfo->philos_arr[i].data = pinfo;

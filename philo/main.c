@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:17 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/04 23:07:24 by raf              ###   ########.fr       */
+/*   Updated: 2024/10/05 16:05:19 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ int	main(int argc, char **argv)
 	t_philo_info	*philo_info;
 
 	if (!(argc == 5 || argc == 6))
-		return (printf("Invalid number of arguments\n"));
+		return (printf("\t! Error !\nInvalid number of arguments\n"));
 	if (validacia(argc, argv) == 1)
-		return (printf("invalid argument\n"));
+		return (printf("    ! Error !\nInvalid arguments\n"));
 	philo_info = malloc(sizeof(t_philo_info));
 	if (philo_info == 0)
-		return (printf("Memory allocation error!\n"));
+		return (printf("\t! Error !\nMemory allocation error!\n"));
 	init_philo_info(philo_info, argc, argv);
 	if (philo_info->count_eat == 0)
 		return (0);
@@ -91,6 +91,26 @@ int	eating(t_philo *philo, pthread_mutex_t *left_fork,
 	return (1);
 }
 
+int	taking_forks(t_philo *philo,
+	pthread_mutex_t **l_fork, pthread_mutex_t **r_fork)
+{
+	if (!print(philo->data, philo->index, "has taken a fork")
+		|| philo->data->philos_count == 1)
+	{
+		pthread_mutex_unlock(*r_fork);
+		return (0);
+	}
+	pthread_mutex_lock(*l_fork);
+	if (!print(philo->data, philo->index, "has taken a fork")
+		|| philo->data->philos_count == 1)
+	{
+		pthread_mutex_unlock(*r_fork);
+		pthread_mutex_unlock(*l_fork);
+		return (0);
+	}
+	return (1);
+}
+
 int	close_destroy(t_philo_info *philos_info)
 {
 	int	i;
@@ -112,24 +132,4 @@ int	close_destroy(t_philo_info *philos_info)
 	free(philos_info->forks_arr);
 	free(philos_info);
 	return (0);
-}
-
-int	taking_forks(t_philo *philo,
-	pthread_mutex_t **l_fork, pthread_mutex_t **r_fork)
-{
-	if (!print(philo->data, philo->index, "has taken a fork")
-		|| philo->data->philos_count == 1)
-	{
-		pthread_mutex_unlock(*r_fork);
-		return (0);
-	}
-	pthread_mutex_lock(*l_fork);
-	if (!print(philo->data, philo->index, "has taken a fork")
-		|| philo->data->philos_count == 1)
-	{
-		pthread_mutex_unlock(*r_fork);
-		pthread_mutex_unlock(*l_fork);
-		return (0);
-	}
-	return (1);
 }

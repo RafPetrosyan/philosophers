@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   source.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 16:24:22 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/02 21:13:11 by raf              ###   ########.fr       */
+/*   Updated: 2024/10/05 15:46:25 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,13 @@ long long	get_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000) - smt);
 }
 
-int	get_finish_time(t_philo_info *philos)
+int	get_finish_time(t_philo_info *philo_info)
 {
 	int	finish_time;
 
-	pthread_mutex_lock(&(philos->finish_mutex));
-	finish_time = philos->finish_time;
-	pthread_mutex_unlock(&(philos->finish_mutex));
+	pthread_mutex_lock(&(philo_info->finish_mutex));
+	finish_time = philo_info->finish_time;
+	pthread_mutex_unlock(&(philo_info->finish_mutex));
 	return (finish_time);
 }
 

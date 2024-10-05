@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validacia.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: raf <raf@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: rafpetro <rafpetro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/30 15:48:50 by rafpetro          #+#    #+#             */
-/*   Updated: 2024/10/03 00:41:48 by raf              ###   ########.fr       */
+/*   Created: 2024/08/17 15:48:50 by rafpetro          #+#    #+#             */
+/*   Updated: 2024/10/05 15:14:28 by rafpetro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,9 @@ int	validacia(int argc, char **argv)
 	while (i < argc)
 	{
 		if (ft_atoi(argv[i]) == -1)
-		{
-			printf("Invalid Argument !\n");
 			return (1);
-		}
-		if (i != argc - 1 && ft_atoi(argv[i]) == 0)
-		{
-			printf("Invalid Argument !\n");
+		if (i != 5 && ft_atoi(argv[i]) == 0)
 			return (1);
-		}
 		++i;
 	}
 	return (0);
@@ -38,13 +32,13 @@ int	error_handler(int i, t_philo_info *philo_info)
 {
 	if (i == 1)
 	{
-		printf("Memory allocation error!\n");
+		printf("\t! Error !\nMemory allocation error!\n");
 		free(philo_info);
 		return (1);
 	}
 	if (i == 2)
 	{
-		printf("Memory allocation error!\n");
+		printf("\t! Error !\nMemory allocation error!\n");
 		free(philo_info->forks_arr);
 		free(philo_info);
 		return (1);
